@@ -1,0 +1,17 @@
+{
+  "name": "worker-",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "dev": "tsc -b && node dist/index.js"
+  },
+  "dependencies": {
+    "@repo/typescript-config": "workspace:*",
+    "@repo/redis": "workspace:*"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "description": ""
+}
