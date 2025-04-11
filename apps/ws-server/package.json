@@ -1,15 +1,15 @@
 {
-  "name": "worker-",
+  "name": "ws-server",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
     "dev": "tsc -b && node dist/index.js"
   },
   "dependencies": {
-    "@repo/redis": "workspace:*",
     "@repo/typescript-config": "workspace:*",
-    "axios": "^1.8.4",
-    "dockerode": "^4.0.5"
+    "@types/ws": "^8.18.1",
+    "ws": "^8.18.1",
+    "@repo/redis": "workspace:*"
   },
   "keywords": [],
   "author": "",
