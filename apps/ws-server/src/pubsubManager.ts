@@ -1,4 +1,5 @@
 import { client } from "@repo/redis/redisClient";
+import { WebSocket } from "ws";
 
 export class PubSub {
 
@@ -11,13 +12,16 @@ export class PubSub {
     this.redisClient.connect();
     this.subscriptions = new Map()
   }
-  userSubscribe(userId: string, problemId: string) {
+  userSubscribe(userId: string, problemId: string, socket: WebSocket) {
     this.subscriptions.set(userId, problemId);
     if (this.subscriptions.has(userId)) {
       const channel = `userId:${userId},problemId:${problemId}`
       this.redisClient.subscribe(channel, (message) => {
         console.log(message)
-        this.handleMessage(message)
+        console.log("hi bro ");
+        this.redisClient.unsubscribe(channel);
+        socket.terminate();
+        console.log("hi bro ");
       })
     }
   }
