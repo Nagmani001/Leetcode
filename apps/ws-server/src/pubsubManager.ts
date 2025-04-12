@@ -17,14 +17,14 @@ export class PubSub {
     if (this.subscriptions.has(userId)) {
       const channel = `userId:${userId},problemId:${problemId}`
       this.redisClient.subscribe(channel, (message) => {
+        socket.send(message)
         console.log(message)
-        console.log("hi bro ");
         this.redisClient.unsubscribe(channel);
         socket.terminate();
-        console.log("hi bro ");
       })
     }
   }
+
   userUnsubscribe(userId: string, problemId: string) {
     if (this.subscriptions.has(userId)) {
       this.subscriptions.delete(userId);

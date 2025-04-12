@@ -4,10 +4,12 @@ import axios from "axios";
 async function processSubmission(sumbission: string | undefined) {
   const { userId, code, language, problemId } = JSON.parse(sumbission || "");
   try {
-    const response = await axios.post("http://52.66.252.35:2358/submissions?base64_encoded=false&wait=true", {
+    console.log("request sent to server");
+    const response = await axios.post("http://65.0.180.17:2358/submissions?base64_encoded=false&wait=true", {
       language_id: language,
       source_code: code
     });
+    console.log("solved")
     console.log(response.data);
     const channel = `userId:${userId},problemId:${problemId}`
 
@@ -28,6 +30,7 @@ async function startWorker() {
     await client.connect();
     while (true) {
       const response = await client.brPop("problems", 0)
+      console.log("i poped")
       await processSubmission(response?.element)
     }
 

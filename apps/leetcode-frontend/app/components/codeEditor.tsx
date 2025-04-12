@@ -48,6 +48,7 @@ var twoSum = function(nums, target) {
                 problemId: 2
               });
             } catch (err) {
+              console.log(" an error occured while sending the code ")
               console.log(err)
             }
             try {
@@ -58,9 +59,9 @@ var twoSum = function(nums, target) {
                   problemId: 2
                 }));
                 socket.addEventListener("message", (data: any) => {
-                  const parsedData = JSON.parse(data);
-                  console.log(response);
-                  setResponse(parsedData)
+                  console.log("i received the data");
+                  console.log(data.data)
+                  setResponse(data.data)
                 })
               }
 
@@ -71,7 +72,7 @@ var twoSum = function(nums, target) {
           }}>Submit</button>
         </div>
         <div className=" h-full w-full bg-red-50">
-          {response?.stdout ? response?.stdout : response?.stderr}
+          {response}
         </div>
       </div>
     </div >
