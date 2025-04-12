@@ -16,6 +16,7 @@ export class PubSub {
     if (this.subscriptions.has(userId)) {
       const channel = `userId:${userId},problemId:${problemId}`
       this.redisClient.subscribe(channel, (message) => {
+        console.log(message)
         this.handleMessage(message)
       })
     }
@@ -30,8 +31,7 @@ export class PubSub {
 
   }
 
-  handleMessage(message: string) {
-    console.log(message)
+  handleMessage(message: any) {
   }
 
   public static getInstance() {
