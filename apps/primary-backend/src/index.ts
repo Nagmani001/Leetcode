@@ -1,4 +1,7 @@
 import express, { Request, Response } from "express";
+import { prismaClient } from "@repo/db/client";
+import bcrypt from "bcrypt";
+import { signupSchema } from "@repo/common/types";
 import cors from "cors";
 import { client } from "@repo/redis/redisClient";
 
@@ -29,6 +32,31 @@ app.post("/submit", async (req: Request, res: Response) => {
   }
 });
 
+
+app.post("/signup", async (req: Request, res: Response) => {
+  console.log(req.body)
+  const parsedData = signupSchema.safeParse(req.body);
+  if (!parsedData.success) {
+    res.json({
+      msg: "invalid data"
+    })
+  }
+  if (!parsedData.data?.password) {
+    return;
+  }
+  const hashedPassword = await bcrypt.hash(parsedData.data?.password, 10);
+  const addUser = await prismaClient.user.create({
+    data: {
+      username: parsedData.data.username,
+      email: parsedData.data.email,
+      password: hashedPassword,
+      role: "USER"
+    }
+  });
+  res.json({
+    msg: "user created"
+  })
+});
 
 async function startServer() {
   try {

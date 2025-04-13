@@ -16,19 +16,44 @@ datasource db {
 model User {
   id       Int    @id @default(autoincrement())
   username String
-  email    String
+  email    String @unique
   password String
-  role     Role
+  role     Role?
 }
 
 model Problems {
-  id          Int    @id @default(autoincrement())
+  id          String    @id @default(uuid())
   title       String
   description String
-  examples    String
+  example     Example[]
+  constraints Constraints[]
+  tag         Tag
+}
+
+model Example {
+  id          String    @id @default(uuid())
+  input       String
+  output      String
+  explanation String?
+  problemId   Int
+  Problems    Problems? @relation(fields: [problemsId], references: [id])
+  problemsId  String?
+}
+
+model Constraints {
+  id           String    @id @default(uuid())
+  value        String?
+  Problems     Problems? @relation(fields: [problemsId], references: [id])
+  problemsId   String?
 }
 
 enum Role {
   USER
   ADMIN
+}
+
+enum Tag {
+  EASY
+  MEDIUM
+  HARD
 }

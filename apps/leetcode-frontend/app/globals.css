@@ -109,6 +109,13 @@
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
 }
+@theme {
+  --color-backgroundColor: #f0f0f0;
+  --color-cardBackground: #ffffff;
+  --color-cardTop: #fafafa;
+  --color-cardBorder: #dadada;
+;
+}
 
 @layer base {
   * {

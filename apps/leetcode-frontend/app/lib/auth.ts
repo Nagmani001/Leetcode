@@ -1,5 +1,6 @@
-import GithubProvider from "next-auth/providers/github";
 import CredentialsProvider from "next-auth/providers/credentials";
+import bcrypt from "bcrypt";
+import { prismaClient } from "@repo/db/client";
 
 export const AUTH_OPTIONS = {
   providers: [
@@ -9,19 +10,37 @@ export const AUTH_OPTIONS = {
         username: { label: "Username", type: "text", placeholde: "Nagmani" },
         password: { label: "Password", type: "password", placeholder: "itsboy" }
       },
-      async authorize(credentials, req) {
-        console.log(credentials);
-        const user = { id: "1", name: "Nagmani", email: "nagmanipd3@gmail.com" }
-        if (user) {
-          return user
-        } else {
+      async authorize(credentials) {
+
+        if (!credentials?.password || !credentials.password) {
+          return null;
+        }
+        const getUser = await prismaClient.user.findUnique({
+          where: {
+            email: credentials.username,
+          }
+        });
+        if (!getUser?.password) {
           return null
+        }
+        const comparePassword = await bcrypt.compare(credentials.password, getUser?.password);
+        if (comparePassword) {
+          return getUser
         }
       },
     }),
-    GithubProvider({
-      clientId: process.env.GITHUB_ID || "",
-      clientSecret: process.env.GITHUB_SECRET || ""
-    })
-  ]
+  ],
+  secret: process.env.NEXTAUTH_SECRET || 'secr3t',
+  callbacks: {
+    async session({ token }: {
+      token: any
+    }) {
+      return token
+    },
+    async jwt({ token }: {
+      token: any
+    }) {
+      return token
+    },
+  }
 }
